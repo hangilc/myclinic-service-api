@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -62,15 +62,18 @@
 	function request(service, data, method, cb){
 		data = data || {};
 		method = method || "GET";
-		var url = new URL(window.location.origin + "/service");
-		url.searchParams.append("_q", service);
+		//var url = new URL(window.location.origin + "/service");
+		var url = window.location.origin + "/service";
+		var searchParams = new URLSearchParams();
+		searchParams.append("_q", service);
+		//url.searchParams.append("_q", service);
 		var opt = {
 			method: method,
 			headers: {}
 		};
 		if( method === "GET" ){
 			Object.keys(data).forEach(function(key){
-				url.searchParams.append(key, data[key]);
+				searchParams.append(key, data[key]);
 			});
 		}
 		if( method === "POST" ){
@@ -89,6 +92,7 @@
 				cb("TIMEOUT");
 			}
 		}, timeout);
+		url += "?" + searchParams.toString();
 		conti.fetchJson(url, opt, function(err, result){
 			if( timer ){
 				clearTimeout()
@@ -674,7 +678,7 @@
 		exports.fetch(url, opt, "text", cb);
 	}
 
-	})( true ? exports : (window.conti = {}));
+	})(true ? exports : (window.conti = {}));
 
 /***/ }
-/******/ ]);
+/******/ ])

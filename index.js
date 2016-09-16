@@ -7,15 +7,18 @@ var timeout = 15000;
 function request(service, data, method, cb){
 	data = data || {};
 	method = method || "GET";
-	var url = new URL(window.location.origin + "/service");
-	url.searchParams.append("_q", service);
+	//var url = new URL(window.location.origin + "/service");
+	var url = window.location.origin + "/service";
+	var searchParams = new URLSearchParams();
+	searchParams.append("_q", service);
+	//url.searchParams.append("_q", service);
 	var opt = {
 		method: method,
 		headers: {}
 	};
 	if( method === "GET" ){
 		Object.keys(data).forEach(function(key){
-			url.searchParams.append(key, data[key]);
+			searchParams.append(key, data[key]);
 		});
 	}
 	if( method === "POST" ){
@@ -34,6 +37,7 @@ function request(service, data, method, cb){
 			cb("TIMEOUT");
 		}
 	}, timeout);
+	url += "?" + searchParams.toString();
 	conti.fetchJson(url, opt, function(err, result){
 		if( timer ){
 			clearTimeout()
