@@ -7,11 +7,9 @@ var timeout = 15000;
 function request(service, data, method, cb){
 	data = data || {};
 	method = method || "GET";
-	//var url = new URL(window.location.origin + "/service");
 	var url = window.location.origin + "/service";
 	var searchParams = new URLSearchParams();
 	searchParams.append("_q", service);
-	//url.searchParams.append("_q", service);
 	var opt = {
 		method: method,
 		headers: {}
@@ -466,6 +464,12 @@ exports.prescDone = function(visitId, done){
 	request("presc_done", {
 		visit_id: visitId
 	}, "POST", done);
+};
+
+exports.getDrug = function(drugId, cb){
+	request("get_drug", {
+		drug_id: drugId
+	}, "GET", cb);
 };
 
 
