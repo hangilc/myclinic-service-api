@@ -456,7 +456,7 @@ exports.listFullVisitsByIyakuhincode = function(patientId, iyakuhincode, offset,
 
 exports.findPharmaDrug = function(iyakuhincode, cb){
 	request("find_pharma_drug", {
-		iyakuhicode: iyakuhincode
+		iyakuhincode: iyakuhincode
 	}, "GET", cb);
 };
 
