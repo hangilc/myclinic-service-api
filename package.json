@@ -1,6 +1,6 @@
 {
   "name": "myclinic-service-api",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Access API for myclinic service",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/hangilc/myclinic-service-api#readme",
   "dependencies": {
-    "conti": "^1.3.2"
+    "conti": "^1.3.2",
+    "setimmediate": "^1.0.5"
   },
   "devDependencies": {
     "body-parser": "^1.15.2",

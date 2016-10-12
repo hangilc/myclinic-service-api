@@ -1,5 +1,6 @@
 "use strict";
 
+require("setimmediate");
 var conti = require("conti");
 
 var timeout = 15000;
