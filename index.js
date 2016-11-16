@@ -106,6 +106,10 @@ exports.listFullWqueueForExam = function(cb){
 	request("list_full_wqueue_for_exam", {}, "GET", cb);
 };
 
+exports.listFullWqueueForCashier = function(cb){
+	request("list_full_wqueue_for_cashier", {}, "GET", cb);
+};
+
 exports.getVisit = function(visitId, cb){
 	request("get_visit", {visit_id: +visitId}, "GET", cb);
 };
