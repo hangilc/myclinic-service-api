@@ -473,5 +473,16 @@ exports.getDrug = function(drugId, cb){
 	}, "GET", cb);
 };
 
+exports.enterPayment = function(visitId, amount, paytime, done){
+	request("enter_payment", {
+		visit_id: visitId,
+		amount: amount,
+		paytime: paytime
+	}, "POST", done);
+};
+
+exports.listPayments = function(visitId, cb){
+	request("list_payment", { visit_id: visitId }, "GET", cb);
+};
 
 
