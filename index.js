@@ -78,6 +78,19 @@ exports.getPatient = function(patientId, cb){
 	request("get_patient", {patient_id: patientId}, "GET", cb);
 };
 
+exports.enterPatient = function(patient, cb){
+	request("enter_patient", patient, "POST", function(err, result){
+		if( err ){
+			cb(err);
+			return;
+		}
+		patient.patient_id = result;
+		cb();
+	});
+};
+
+exports.insertPatient = exports.enterPatient;
+
 exports.calcVisits = function(patientId, cb){
 	request("calc_visits", {patient_id: patientId}, "GET", cb);
 };
@@ -110,9 +123,32 @@ exports.listFullWqueueForCashier = function(cb){
 	request("list_full_wqueue_for_cashier", {}, "GET", cb);
 };
 
+exports.enterWqueue = function(wqueue, done){
+	request("enter_wqueue", wqueue, "POST", done);
+};
+
+exports.insertWqueue = exports.enterWqueue;
+
+exports.findWqueue = function(visitId, cb){
+	request("find_wqueue", { visit_id: visitId }, "GET", cb);
+};
+
 exports.getVisit = function(visitId, cb){
 	request("get_visit", {visit_id: +visitId}, "GET", cb);
 };
+
+exports.enterVisit = function(visit, cb){
+	request("enter_visit", visit, "POST", function(err, visitId){
+		if( err ){
+			cb(err);
+			return;	
+		}
+		visit.visit_id = visitId;
+		cb();
+	});
+};
+
+exports.insertVisit = exports.enterVisit;
 
 exports.searchPatient = function(text, cb){
 	request("search_patient", {text: text}, "GET", cb);
@@ -122,8 +158,8 @@ exports.listTodaysVisits = function(cb){
 	request("list_todays_visits", {}, "GET", cb);
 };
 
-exports.startVisit = function(patientId, at, done){
-	request("start_visit", {patient_id: patientId, at: at}, "POST", done);
+exports.startVisit = function(patientId, at, cb){
+	request("start_visit", {patient_id: patientId, at: at}, "POST", cb);
 };
 
 exports.deleteVisit = function(visitId, done){
@@ -179,8 +215,17 @@ exports.getIyakuhinMaster = function(iyakuhincode, at, cb){
 };
 
 exports.enterDrug = function(drug, cb){
-	request("enter_drug", drug, "POST", cb);
+	request("enter_drug", drug, "POST", function(err, result){
+		if( err ){
+			cb(err);
+			return;
+		}
+		drug.drug_id = result;
+		cb(undefined, result);
+	});
 };
+
+exports.insertDrug = exports.enterDrug;
 
 exports.getFullDrug = function(drugId, at, cb){
 	request("get_full_drug", {drug_id: drugId, at: at}, "GET", cb);
@@ -477,16 +522,22 @@ exports.getDrug = function(drugId, cb){
 	}, "GET", cb);
 };
 
-exports.enterPayment = function(visitId, amount, paytime, done){
-	request("enter_payment", {
-		visit_id: visitId,
-		amount: amount,
-		paytime: paytime
-	}, "POST", done);
+exports.enterPayment = function(payment, done){
+	request("enter_payment", payment, "POST", done);
 };
+
+exports.insertPayment = exports.enterPayment;
 
 exports.listPayments = function(visitId, cb){
 	request("list_payment", { visit_id: visitId }, "GET", cb);
 };
 
+exports.finishCashier = function(visitId, amount, paytime, done){
+	request("finish_cashier", { visit_id: visitId, amount: amount, paytime: paytime }, "POST", done);
+};
 
+exports.enterPharmaQueue = function(queue, done){
+	request("enter_pharma_queue", queue, "POST", done);
+};
+
+exports.insertPharmaQueue = exports.enterPharmaQueue;
