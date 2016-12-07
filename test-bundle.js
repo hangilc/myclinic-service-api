@@ -94,7 +94,7 @@
 		url += "?" + searchParams.toString();
 		conti.fetchJson(url, opt, function(err, result){
 			if( timer ){
-				clearTimeout()
+				clearTimeout(timer)
 			}
 			if( !done ){
 				done = true;
@@ -103,28 +103,6 @@
 		});
 	}
 
-	// function request(service, data, method, cb){
-	// 	data = data || {};
-	// 	method = method || "GET";
-	// 	var config = {
-	// 		url: "./service?_q=" + service,
-	//         type: method,
-	// 		data: data,
-	// 		dataType: "json",
-	// 		success: function(list){
-	// 			cb(undefined, list);
-	// 		},
-	// 		error: function(xhr, err, errThrown){
-	// 			cb("ERROR: " + (xhr.responseText || err || errThrown));
-	// 		},
-	// 		timeout: 10000
-	// 	};
-	// 	if( method === "POST" && typeof data === "string" ){
-	// 		config.contentType = "application/json";
-	// 	}
-	// 	$.ajax(config);
-	// }
-
 	exports.recentVisits = function(cb){
 		request("recent_visits", "", "GET", cb);
 	};
@@ -132,6 +110,19 @@
 	exports.getPatient = function(patientId, cb){
 		request("get_patient", {patient_id: patientId}, "GET", cb);
 	};
+
+	exports.enterPatient = function(patient, cb){
+		request("enter_patient", patient, "POST", function(err, result){
+			if( err ){
+				cb(err);
+				return;
+			}
+			patient.patient_id = result;
+			cb();
+		});
+	};
+
+	exports.insertPatient = exports.enterPatient;
 
 	exports.calcVisits = function(patientId, cb){
 		request("calc_visits", {patient_id: patientId}, "GET", cb);
@@ -161,9 +152,36 @@
 		request("list_full_wqueue_for_exam", {}, "GET", cb);
 	};
 
+	exports.listFullWqueueForCashier = function(cb){
+		request("list_full_wqueue_for_cashier", {}, "GET", cb);
+	};
+
+	exports.enterWqueue = function(wqueue, done){
+		request("enter_wqueue", wqueue, "POST", done);
+	};
+
+	exports.insertWqueue = exports.enterWqueue;
+
+	exports.findWqueue = function(visitId, cb){
+		request("find_wqueue", { visit_id: visitId }, "GET", cb);
+	};
+
 	exports.getVisit = function(visitId, cb){
 		request("get_visit", {visit_id: +visitId}, "GET", cb);
 	};
+
+	exports.enterVisit = function(visit, cb){
+		request("enter_visit", visit, "POST", function(err, visitId){
+			if( err ){
+				cb(err);
+				return;	
+			}
+			visit.visit_id = visitId;
+			cb();
+		});
+	};
+
+	exports.insertVisit = exports.enterVisit;
 
 	exports.searchPatient = function(text, cb){
 		request("search_patient", {text: text}, "GET", cb);
@@ -173,8 +191,8 @@
 		request("list_todays_visits", {}, "GET", cb);
 	};
 
-	exports.startVisit = function(patientId, at, done){
-		request("start_visit", {patient_id: patientId, at: at}, "POST", done);
+	exports.startVisit = function(patientId, at, cb){
+		request("start_visit", {patient_id: patientId, at: at}, "POST", cb);
 	};
 
 	exports.deleteVisit = function(visitId, done){
@@ -230,8 +248,17 @@
 	};
 
 	exports.enterDrug = function(drug, cb){
-		request("enter_drug", drug, "POST", cb);
+		request("enter_drug", drug, "POST", function(err, result){
+			if( err ){
+				cb(err);
+				return;
+			}
+			drug.drug_id = result;
+			cb(undefined, result);
+		});
 	};
+
+	exports.insertDrug = exports.enterDrug;
 
 	exports.getFullDrug = function(drugId, at, cb){
 		request("get_full_drug", {drug_id: drugId, at: at}, "GET", cb);
@@ -528,7 +555,139 @@
 		}, "GET", cb);
 	};
 
+	exports.enterPayment = function(payment, done){
+		request("enter_payment", payment, "POST", done);
+	};
 
+	exports.insertPayment = exports.enterPayment;
+
+	exports.listPayments = function(visitId, cb){
+		request("list_payment", { visit_id: visitId }, "GET", cb);
+	};
+
+	exports.finishCashier = function(visitId, amount, paytime, done){
+		request("finish_cashier", { visit_id: visitId, amount: amount, paytime: paytime }, "POST", done);
+	};
+
+	exports.enterPharmaQueue = function(queue, done){
+		request("enter_pharma_queue", queue, "POST", done);
+	};
+
+	exports.insertPharmaQueue = exports.enterPharmaQueue;
+
+	// reception //////////////////////////////////////////////////////
+
+	exports.listFullWqueue = function(cb){
+		request("list_full_wqueue", {}, "GET", cb);
+	};
+
+	exports.updatePatient = function(patient){
+		request("update_patient", patient, "POST", done);
+	};
+
+	exports.listAvailableHoken = function(patientId, ati, cb){
+		request("list_available_hoken", { patient_id: patientId, at: at }, "GET", cb);
+	};
+
+	exports.getShahokokuho = function(shahokokuhoId, cb){
+		request("get_shahokokuho", { shahokokuho_id: shahokokuhoId }, "GET", cb);
+	};
+
+	exports.updateShahokokuho = function(shahokokuho, done){
+		request("update_shahokokuho", shahokokuho, "POST", done);
+	};
+
+	exports.deleteShahokokuho = function(shahokokuhoId, done){
+		request("delete_shahokokuho", { shahokokuho_id: shahokokuhoId }, "POST", done);
+	};
+
+	exports.enterShahokokuho = function(shahokokuho, done){
+		request("enter_shahokokuho", shahokokuho, "POST", function(err, result){
+			if( err ){
+				done(err);
+				return;
+			}
+			shahokokuho.shahokokuho_id = result;
+			done();
+		});
+	};
+
+	exports.getKoukikourei = function(koukikoureiId, cb){
+		request("get_koukikourei", { koukikourei_id: koukikoureiId }, "GET", cb);
+	};
+
+	exports.updateKoukikourei = function(koukikourei, done){
+		request("update_koukikourei", koukikourei, "POST", done);
+	};
+
+	exports.deleteKoukikourei = function(koukikoureiId, done){
+		request("delete_koukikourei", { koukikourei_id: koukikoureiId }, "POST", done);
+	};
+
+	exports.enterKoukikourei = function(koukikourei, done){
+		request("enter_koukikourei", koukikourei, "POST", function(err, result){
+			if( err ){
+				done(err);
+				return;
+			}
+			koukikourei.koukikourei_id = result;
+			done();
+		});
+	};
+
+	exports.getRoujin = function(roujinId, cb){
+		request("get_roujin", { roujin_id: roujinId }, "GET", cb);
+	};
+
+	exports.updateRoujin = function(roujin, done){
+		request("update_roujin", roujin, "POST", done);
+	};
+
+	exports.deleteRoujin = function(roujinId, done){
+		request("delete_roujin", { roujin_id: roujinId }, "POST", done);
+	};
+
+	exports.enterRoujin = function(roujin, done){
+		request("enter_roujin", roujin, "POST", function(err, result){
+			if( err ){
+				done(err);
+				return;
+			}
+			roujin.roujin_id = result;
+			done();
+		});
+	};
+
+	exports.getKouhi = function(kouhiId, cb){
+		request("get_kouhi", { kouhi_id: kouhiId }, "GET", cb);
+	};
+
+	exports.updateKouhi = function(kouhi, done){
+		request("update_kouhi", kouhi, "POST", done);
+	};
+
+	exports.deleteKouhi = function(kouhiId, done){
+		request("delete_kouhi", { kouhi_id: kouhiId }, "POST", done);
+	};
+
+	exports.enterKouhi = function(kouhi, done){
+		request("enter_kouhi", kouhi, "POST", function(err, result){
+			if( err ){
+				done(err);
+				return;
+			}
+			kouhi.kouhi_id = result;
+			done();
+		});
+	};
+
+	exports.listRecentlyEnteredPatients = function(n, cb){
+		request("list_recently_entered_patients", {n : n}, "GET", cb);
+	};
+
+	exports.deletePatient = function(patientId, done){
+		request("delete_patient", { patient_id: patientId }, "POST", done);
+	};
 
 
 
@@ -740,25 +899,40 @@
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
 	    try {
-	        cachedSetTimeout = setTimeout;
-	    } catch (e) {
-	        cachedSetTimeout = function () {
-	            throw new Error('setTimeout is not defined');
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
 	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
 	    try {
-	        cachedClearTimeout = clearTimeout;
-	    } catch (e) {
-	        cachedClearTimeout = function () {
-	            throw new Error('clearTimeout is not defined');
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
 	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -779,6 +953,11 @@
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -1089,17 +1268,23 @@
 
 	exports.fetchJson = function (url, opt, cb){
 		exports.fetch(url, opt, "json", function(err, result){
-			setImmediate(function(){
+			setTimeout(function(){
 				cb(err, result);
-			});
+			}, 0);
+	//		setImmediate(function(){
+	//			cb(err, result);
+	//		});
 		});
 	}
 
 	exports.fetchText = function (url, opt, cb){
 		exports.fetch(url, opt, "text", function(err, result){
-			setImmediate(function(){
+			setTimeout(function(){
 				cb(err, result);
-			});
+			}, 0);
+	//		setImmediate(function(){
+	//			cb(err, result);
+	//		});
 		});
 	}
 

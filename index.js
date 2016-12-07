@@ -39,7 +39,7 @@ function request(service, data, method, cb){
 	url += "?" + searchParams.toString();
 	conti.fetchJson(url, opt, function(err, result){
 		if( timer ){
-			clearTimeout()
+			clearTimeout(timer)
 		}
 		if( !done ){
 			done = true;
@@ -47,28 +47,6 @@ function request(service, data, method, cb){
 		}
 	});
 }
-
-// function request(service, data, method, cb){
-// 	data = data || {};
-// 	method = method || "GET";
-// 	var config = {
-// 		url: "./service?_q=" + service,
-//         type: method,
-// 		data: data,
-// 		dataType: "json",
-// 		success: function(list){
-// 			cb(undefined, list);
-// 		},
-// 		error: function(xhr, err, errThrown){
-// 			cb("ERROR: " + (xhr.responseText || err || errThrown));
-// 		},
-// 		timeout: 10000
-// 	};
-// 	if( method === "POST" && typeof data === "string" ){
-// 		config.contentType = "application/json";
-// 	}
-// 	$.ajax(config);
-// }
 
 exports.recentVisits = function(cb){
 	request("recent_visits", "", "GET", cb);
@@ -544,76 +522,115 @@ exports.insertPharmaQueue = exports.enterPharmaQueue;
 
 // reception //////////////////////////////////////////////////////
 
-/*
-var Service = {
-	getPatient: function(patientId){
-		return request("get_patient", {patient_id: patientId});
-	},
-	startVisit: function(patientId){
-		return request("start_visit", {patient_id: patientId}, "POST")
-	},
-	listWqueue: function(){
-		return request("list_full_wqueue");
-	},
-	deleteVisit: function(visitId){
-		return request("delete_visit", {visit_id: visitId}, "POST")
-	},
-	updatePatient: function(patient){
-		return request("update_patient", patient, "POST");
-	},
-	enterPatient: function(patient){
-		return request("enter_patient", patient, "POST");
-	},
-	availableHoken: function(patientId){
-		return request("list_available_hoken", {patient_id: patientId, at: util.momentToSqlDate(moment())});
-	},
-	getShahokokuho: function(shahokokuhoId){
-		return request("get_shahokokuho", {shahokokuho_id: shahokokuhoId});
-	},
-	updateShahokokuho: function(shahokokuho){
-		return request("update_shahokokuho", shahokokuho, "POST");
-	},
-	deleteShahokokuho: function(shahokokuhoId){
-		return request("delete_shahokokuho", {shahokokuho_id: shahokokuhoId}, "POST");
-	},
-	enterShahokokuho: function(shahokokuho){
-		return request("enter_shahokokuho", shahokokuho, "POST");
-	},
-	getKoukikourei: function(koukikoureiId){
-		return request("get_koukikourei", {koukikourei_id: koukikoureiId});
-	},
-	updateKoukikourei: function(koukikourei){
-		return request("update_koukikourei", koukikourei, "POST");
-	},
-	deleteKoukikourei: function(koukikoureiId){
-		return request("delete_koukikourei", {koukikourei_id: koukikoureiId}, "POST");
-	},
-	enterKoukikourei: function(koukikourei){
-		return request("enter_koukikourei", koukikourei, "POST");
-	},
-	getRoujin: function(roujinId){
-		return request("get_roujin", {roujin_id: roujinId});
-	},
-	getKouhi: function(kouhiId){
-		return request("get_kouhi", {kouhi_id: kouhiId})
-	},
-	updateKouhi: function(kouhi){
-		return request("update_kouhi", kouhi, "POST");
-	},
-	enterKouhi: function(kouhi){
-		return request("enter_kouhi", kouhi, "POST");
-	},
-	deleteKouhi: function(kouhiId){
-		return request("delete_kouhi", {kouhi_id: kouhiId}, "POST");
-	},
-	recentlyEnteredPatients: function(){
-		return request("list_recently_entered_patients", {});
-	},
-	deletePatient: function(patientId){
-		return request("delete_patient", {patient_id: patientId}, "POST");
-	},
-	searchPatient: function(text){
-		return request("search_patient", {text: text});
-	}
+exports.listFullWqueue = function(cb){
+	request("list_full_wqueue", {}, "GET", cb);
 };
-*/
+
+exports.updatePatient = function(patient){
+	request("update_patient", patient, "POST", done);
+};
+
+exports.listAvailableHoken = function(patientId, ati, cb){
+	request("list_available_hoken", { patient_id: patientId, at: at }, "GET", cb);
+};
+
+exports.getShahokokuho = function(shahokokuhoId, cb){
+	request("get_shahokokuho", { shahokokuho_id: shahokokuhoId }, "GET", cb);
+};
+
+exports.updateShahokokuho = function(shahokokuho, done){
+	request("update_shahokokuho", shahokokuho, "POST", done);
+};
+
+exports.deleteShahokokuho = function(shahokokuhoId, done){
+	request("delete_shahokokuho", { shahokokuho_id: shahokokuhoId }, "POST", done);
+};
+
+exports.enterShahokokuho = function(shahokokuho, done){
+	request("enter_shahokokuho", shahokokuho, "POST", function(err, result){
+		if( err ){
+			done(err);
+			return;
+		}
+		shahokokuho.shahokokuho_id = result;
+		done();
+	});
+};
+
+exports.getKoukikourei = function(koukikoureiId, cb){
+	request("get_koukikourei", { koukikourei_id: koukikoureiId }, "GET", cb);
+};
+
+exports.updateKoukikourei = function(koukikourei, done){
+	request("update_koukikourei", koukikourei, "POST", done);
+};
+
+exports.deleteKoukikourei = function(koukikoureiId, done){
+	request("delete_koukikourei", { koukikourei_id: koukikoureiId }, "POST", done);
+};
+
+exports.enterKoukikourei = function(koukikourei, done){
+	request("enter_koukikourei", koukikourei, "POST", function(err, result){
+		if( err ){
+			done(err);
+			return;
+		}
+		koukikourei.koukikourei_id = result;
+		done();
+	});
+};
+
+exports.getRoujin = function(roujinId, cb){
+	request("get_roujin", { roujin_id: roujinId }, "GET", cb);
+};
+
+exports.updateRoujin = function(roujin, done){
+	request("update_roujin", roujin, "POST", done);
+};
+
+exports.deleteRoujin = function(roujinId, done){
+	request("delete_roujin", { roujin_id: roujinId }, "POST", done);
+};
+
+exports.enterRoujin = function(roujin, done){
+	request("enter_roujin", roujin, "POST", function(err, result){
+		if( err ){
+			done(err);
+			return;
+		}
+		roujin.roujin_id = result;
+		done();
+	});
+};
+
+exports.getKouhi = function(kouhiId, cb){
+	request("get_kouhi", { kouhi_id: kouhiId }, "GET", cb);
+};
+
+exports.updateKouhi = function(kouhi, done){
+	request("update_kouhi", kouhi, "POST", done);
+};
+
+exports.deleteKouhi = function(kouhiId, done){
+	request("delete_kouhi", { kouhi_id: kouhiId }, "POST", done);
+};
+
+exports.enterKouhi = function(kouhi, done){
+	request("enter_kouhi", kouhi, "POST", function(err, result){
+		if( err ){
+			done(err);
+			return;
+		}
+		kouhi.kouhi_id = result;
+		done();
+	});
+};
+
+exports.listRecentlyEnteredPatients = function(n, cb){
+	request("list_recently_entered_patients", {n : n}, "GET", cb);
+};
+
+exports.deletePatient = function(patientId, done){
+	request("delete_patient", { patient_id: patientId }, "POST", done);
+};
+
