@@ -1,6 +1,6 @@
 {
   "name": "myclinic-service-api",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "dependencies": {
     "conti": {
       "version": "1.3.5",
