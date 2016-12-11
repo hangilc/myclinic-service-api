@@ -530,10 +530,6 @@ exports.updatePatient = function(patient){
 	request("update_patient", patient, "POST", done);
 };
 
-exports.listAvailableHoken = function(patientId, ati, cb){
-	request("list_available_hoken", { patient_id: patientId, at: at }, "GET", cb);
-};
-
 exports.getShahokokuho = function(shahokokuhoId, cb){
 	request("get_shahokokuho", { shahokokuho_id: shahokokuhoId }, "GET", cb);
 };
