@@ -585,10 +585,6 @@
 		request("update_patient", patient, "POST", done);
 	};
 
-	exports.listAvailableHoken = function(patientId, ati, cb){
-		request("list_available_hoken", { patient_id: patientId, at: at }, "GET", cb);
-	};
-
 	exports.getShahokokuho = function(shahokokuhoId, cb){
 		request("get_shahokokuho", { shahokokuho_id: shahokokuhoId }, "GET", cb);
 	};
@@ -610,6 +606,10 @@
 			shahokokuho.shahokokuho_id = result;
 			done();
 		});
+	};
+
+	exports.listShahokokuho = function(patientId, cb){
+		request("list_shahokokuho", { patient_id: patientId }, "GET", cb);
 	};
 
 	exports.getKoukikourei = function(koukikoureiId, cb){
@@ -635,6 +635,10 @@
 		});
 	};
 
+	exports.listKoukikourei = function(patientId, cb){
+		request("list_koukikourei", { patient_id: patientId }, "GET", cb);
+	};
+
 	exports.getRoujin = function(roujinId, cb){
 		request("get_roujin", { roujin_id: roujinId }, "GET", cb);
 	};
@@ -658,6 +662,10 @@
 		});
 	};
 
+	exports.listRoujin = function(patientId, cb){
+		request("list_roujin", { patient_id: patientId }, "GET", cb);
+	};
+
 	exports.getKouhi = function(kouhiId, cb){
 		request("get_kouhi", { kouhi_id: kouhiId }, "GET", cb);
 	};
@@ -679,6 +687,10 @@
 			kouhi.kouhi_id = result;
 			done();
 		});
+	};
+
+	exports.listKouhi = function(patientId, cb){
+		request("list_kouhi", { patient_id: patientId }, "GET", cb);
 	};
 
 	exports.listRecentlyEnteredPatients = function(n, cb){
