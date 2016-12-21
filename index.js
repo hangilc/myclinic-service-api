@@ -534,6 +534,10 @@ exports.getShahokokuho = function(shahokokuhoId, cb){
 	request("get_shahokokuho", { shahokokuho_id: shahokokuhoId }, "GET", cb);
 };
 
+exports.findShahokokuho = function(shahokokuhoId, cb){
+	request("find_shahokokuho", { shahokokuho_id: shahokokuhoId }, "GET", cb);
+};
+
 exports.updateShahokokuho = function(shahokokuho, done){
 	request("update_shahokokuho", shahokokuho, "POST", done);
 };
@@ -559,6 +563,10 @@ exports.listShahokokuho = function(patientId, cb){
 
 exports.getKoukikourei = function(koukikoureiId, cb){
 	request("get_koukikourei", { koukikourei_id: koukikoureiId }, "GET", cb);
+};
+
+exports.findKoukikourei = function(koukikoureiId, cb){
+	request("find_koukikourei", { koukikourei_id: koukikoureiId }, "GET", cb);
 };
 
 exports.updateKoukikourei = function(koukikourei, done){
@@ -588,6 +596,10 @@ exports.getRoujin = function(roujinId, cb){
 	request("get_roujin", { roujin_id: roujinId }, "GET", cb);
 };
 
+exports.findRoujin = function(roujinId, cb){
+	request("find_roujin", { roujin_id: roujinId }, "GET", cb);
+};
+
 exports.updateRoujin = function(roujin, done){
 	request("update_roujin", roujin, "POST", done);
 };
@@ -613,6 +625,10 @@ exports.listRoujin = function(patientId, cb){
 
 exports.getKouhi = function(kouhiId, cb){
 	request("get_kouhi", { kouhi_id: kouhiId }, "GET", cb);
+};
+
+exports.findKouhi = function(kouhiId, cb){
+	request("find_kouhi", { kouhi_id: kouhiId }, "GET", cb);
 };
 
 exports.updateKouhi = function(kouhi, done){
