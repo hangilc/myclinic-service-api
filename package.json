@@ -24,7 +24,7 @@
   "devDependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "myclinic-service": "^1.1.6",
+    "myclinic-service": "^1.1.8",
     "webpack": "^1.14.0"
   }
 }

@@ -654,6 +654,10 @@ exports.listKouhi = function(patientId, cb){
 	request("list_kouhi", { patient_id: patientId }, "GET", cb);
 };
 
+exports.listAllHoken = function(patientId, cb){
+	request("list_all_hoken", { patient_id: patientId }, "GET", cb);
+};
+
 exports.listRecentlyEnteredPatients = function(n, cb){
 	request("list_recently_entered_patients", {n : n}, "GET", cb);
 };
