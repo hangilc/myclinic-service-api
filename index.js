@@ -526,7 +526,7 @@ exports.listFullWqueue = function(cb){
 	request("list_full_wqueue", {}, "GET", cb);
 };
 
-exports.updatePatient = function(patient){
+exports.updatePatient = function(patient, done){
 	request("update_patient", patient, "POST", done);
 };
 
