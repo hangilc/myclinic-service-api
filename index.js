@@ -666,3 +666,6 @@ exports.deletePatient = function(patientId, done){
 	request("delete_patient", { patient_id: patientId }, "POST", done);
 };
 
+exports.listVisitsByDate = function(at, cb){
+	request("list_visits_by_date", { at: at }, "GET", cb);
+}
