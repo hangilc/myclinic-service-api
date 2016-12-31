@@ -333,6 +333,10 @@
 		request("enter_conduct", JSON.stringify(conduct), "POST", cb);
 	};
 
+	exports.getGazouLabel = function(conductId, cb){
+		request("get_gazou_label", { conduct_id: conductId }, "GET", cb);
+	}
+
 	exports.enterGazouLabel = function(gazouLabel, done){
 		request("enter_gazou_label", JSON.stringify(gazouLabel), "POST", done);
 	};
