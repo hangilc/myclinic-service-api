@@ -357,6 +357,10 @@
 		request("batch_enter_conduct_shinryou", JSON.stringify(conductShinryouList), "POST", cb);
 	};
 
+	exports.getConduct = function(conductId, cb){
+		request("get_conduct", {conduct_id: conductId}, "GET", cb);
+	};
+
 	exports.getFullConduct = function(conductId, at, cb){
 		request("get_full_conduct", {conduct_id: conductId, at: at}, "GET", cb);
 	};
