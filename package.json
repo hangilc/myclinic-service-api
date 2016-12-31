@@ -1,6 +1,6 @@
 {
   "name": "myclinic-service-api",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Access API for myclinic service",
   "main": "index.js",
   "scripts": {
